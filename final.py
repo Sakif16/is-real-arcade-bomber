@@ -270,13 +270,15 @@ hospital_warning_time_remaining = 0.0
 # -------------------------------
 # NEW (feature): very small start menu (overlay)
 # -------------------------------
-game_started = False
+game_state = "title"   # "title" → "monologue" → "playing"
+game_started = False   # keep this (used internally)
 WINDOW_W, WINDOW_H = 1200, 900
 # Button rect in NDC (for easy drawing & hit-test conversion in mouse handler)
 BTN_X0, BTN_X1 = -0.15, 0.15
 BTN_Y0, BTN_Y1 = -0.06, 0.06
 
 def start_game():
+
     global game_started, last_frame_time, repair_spawn_accum, upgrade_spawn_accum, hospital_warning_time_remaining
     game_started = True
     # Reset timing so dt does not spike at the first frame after menu
@@ -285,7 +287,101 @@ def start_game():
     upgrade_spawn_accum = 0.0
     hospital_warning_time_remaining = 0.0
 
-def drawStartMenu():
+
+def drawTitleScreen():
+    glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT)
+    glDisable(GL_DEPTH_TEST)
+
+    glMatrixMode(GL_PROJECTION)
+    glPushMatrix()
+    glLoadIdentity()
+    glMatrixMode(GL_MODELVIEW)
+    glPushMatrix()
+    glLoadIdentity()
+
+    # -----------------------
+    # Background (black)
+    # -----------------------
+    glColor3f(0.0, 0.0, 0.0)
+    glBegin(GL_QUADS)
+    glVertex2f(-1, -1)
+    glVertex2f(1, -1)
+    glVertex2f(1, 1)
+    glVertex2f(-1, 1)
+    glEnd()
+
+    # -----------------------
+    # Title Setup
+    # -----------------------
+    title = "Israel Arcade Bomber"
+    font = GLUT_BITMAP_TIMES_ROMAN_24
+
+    # Calculate pixel width of title
+    total_width = 0
+    for ch in title:
+        total_width += glutBitmapWidth(font, ord(ch))
+
+    # Convert to NDC (-1 to 1)
+    start_x = - (total_width / WINDOW_W)
+
+    y_pos = 0.1
+
+    # -----------------------
+    # Draw OUTLINE (yellow)
+    # -----------------------
+    glColor3f(1.0, 1.0, 0.0)
+
+    offsets = [
+        (-0.003, 0), (0.003, 0),
+        (0, -0.003), (0, 0.003),
+        (-0.003, -0.003), (0.003, 0.003),
+        (-0.003, 0.003), (0.003, -0.003)
+    ]
+
+    for dx, dy in offsets:
+        glRasterPos2f(start_x + dx, y_pos + dy)
+        for ch in title:
+            glutBitmapCharacter(font, ord(ch))
+
+    # -----------------------
+    # Draw MAIN TEXT (red)
+    # -----------------------
+    glColor3f(1.0, 0.0, 0.0)
+    glRasterPos2f(start_x, y_pos)
+    for ch in title:
+        glutBitmapCharacter(font, ord(ch))
+
+    # -----------------------
+    # Subtitle (centered)
+    # -----------------------
+    subtitle = "Press ENTER to continue"
+    font2 = GLUT_BITMAP_HELVETICA_18
+
+    sub_width = 0
+    for ch in subtitle:
+        sub_width += glutBitmapWidth(font2, ord(ch))
+
+    sub_x = - (sub_width / WINDOW_W)
+
+    glColor3f(1, 1, 1)
+    glRasterPos2f(sub_x, -0.15)
+    for ch in subtitle:
+        glutBitmapCharacter(font2, ord(ch))
+
+    # -----------------------
+    # Cleanup
+    # -----------------------
+    glPopMatrix()
+    glMatrixMode(GL_PROJECTION)
+    glPopMatrix()
+    glMatrixMode(GL_MODELVIEW)
+    glPopAttrib()
+
+
+
+
+
+def drawMonologueScreen():
     # Pure overlay, no side-effects on the 3D world
     glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_LINE_BIT)
     glDisable(GL_DEPTH_TEST)
@@ -991,8 +1087,13 @@ def display():
     global hospital_warning_time_remaining
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-    if not game_started:
-        drawStartMenu()
+    if game_state == "title":
+        drawTitleScreen()
+        glutSwapBuffers()
+        return
+
+    elif game_state == "monologue":
+        drawMonologueScreen()
         glutSwapBuffers()
         return
 
@@ -1276,7 +1377,7 @@ def timer(value):
     global upgrade_spawn_accum, UPGRADE_TOKEN_SPIN_DEG, upgrade_tokens
     global hospital_warning_time_remaining, MAX_BOMBS
 
-    if not game_started:
+    if game_state != "playing":
         glutPostRedisplay()
         glutTimerFunc(16, timer, 0)
         return
@@ -1497,12 +1598,17 @@ def keyboard(key, x, y):
     global keys_pressed, bullets, bullets_fired_count, bomber_scope_enabled, aircraft_velocity_x, aircraft_velocity_z
     global bombs_available, is_reloading, reload_time_remaining, game_over
 
-    if not game_started:
-        if key in (b'\r', b' '):
+    global game_state
+
+    if game_state == "title":
+        if key == b'\r':  # ENTER
+            game_state = "monologue"
+        return
+
+    elif game_state == "monologue":
+        if key == b'\r':  # ENTER again
+            game_state = "playing"
             start_game()
-            return
-        if key == b'q':
-            exit()
         return
 
     modifiers = glutGetModifiers()
