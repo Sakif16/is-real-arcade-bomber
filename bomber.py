@@ -352,6 +352,27 @@ def drawTitleScreen():
         glutBitmapCharacter(font, ord(ch))
 
     # -----------------------
+    # Author / Inspiration credits
+    # -----------------------
+    credit_font = GLUT_BITMAP_HELVETICA_18
+    credit1 = "Made by Sakib Muhtasim"
+    credit2 = "Inspired by War Thunder"
+
+    credit1_width = sum(glutBitmapWidth(credit_font, ord(ch)) for ch in credit1)
+    credit2_width = sum(glutBitmapWidth(credit_font, ord(ch)) for ch in credit2)
+    credit1_x = - (credit1_width / WINDOW_W)
+    credit2_x = - (credit2_width / WINDOW_W)
+
+    glColor3f(0.9, 0.9, 0.9)
+    glRasterPos2f(credit1_x, y_pos - 0.065)
+    for ch in credit1:
+        glutBitmapCharacter(credit_font, ord(ch))
+
+    glRasterPos2f(credit2_x, y_pos - 0.105)
+    for ch in credit2:
+        glutBitmapCharacter(credit_font, ord(ch))
+
+    # -----------------------
     # Subtitle (centered)
     # -----------------------
     subtitle = "Press ENTER to continue"
@@ -404,23 +425,21 @@ def drawMonologueScreen():
 
     # Title / description
     glColor3f(1.0, 1.0, 1.0)
-    glRasterPos2f(-0.70, 0.40)
-    for ch in "Mission: Bomb Israel": glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(ch))
-    glRasterPos2f(-0.70, 0.34)
-    for ch in "Buckle up you Syrian war dog! Our friends from the United States of Israel sent us a wittle pwetty gift!":
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(ch))
-    glRasterPos2f(-0.70, 0.29)
-    for ch in "Behold! The fabulous B-2 Spirit Bomber! This bird came with a manual too!! Umm.....It says~~":
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(ch))
-    glRasterPos2f(-0.70, 0.24)
-    for ch in "WASD to maneuver the bomber, Spacebar to drop bombs and B for scope, LShift to speed up and LCtrl to speed down.":
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(ch))
-    glRasterPos2f(-0.70, 0.19)
-    for ch in "Wow! That was hella simple!":
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(ch))
-    glRasterPos2f(-0.70, 0.14)
-    for ch in "We will be supplying you with repairs and upgrades every 60 seconds. Now go bomb those bastards STRAIGHT TO HELL!":
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(ch))
+    font = GLUT_BITMAP_HELVETICA_18
+    lines = [
+        ("Mission: Bomb Israel", 0.40),
+        ("Buckle up you Syrian war dog! Our friends from the United States of Israel sent us a wittle pwetty gift!", 0.34),
+        ("Behold! The fabulous B-2 Spirit Bomber! This bird came with a manual too!! Umm.....It says~~", 0.29),
+        ("W, A, S, D to maneuver the bomber, Spacebar to drop bombs and B for scope, LShift to speed up and LCtrl to speed down.", 0.24),
+        ("Wow! That was hella simple!", 0.19),
+        ("We will be supplying you with repairs and upgrades every 60 seconds. Now go bomb those bastards STRAIGHT TO HELL!", 0.14)
+    ]
+    for text, y in lines:
+        total_width = sum(glutBitmapWidth(font, ord(ch)) for ch in text)
+        start_x = - (total_width / WINDOW_W)
+        glRasterPos2f(start_x, y)
+        for ch in text:
+            glutBitmapCharacter(font, ord(ch))
 
     # Start button
     glColor4f(0.15, 0.15, 0.18, 0.95)
@@ -436,10 +455,12 @@ def drawMonologueScreen():
     glEnd()
 
     # Button label
-    label = "START"
-    # Center-ish label
-    glRasterPos2f(-0.035 * len(label) / 6.0, -0.01)
-    for ch in label: glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(ch))
+    label = "ENTER"
+    font = GLUT_BITMAP_HELVETICA_18
+    total_width = sum(glutBitmapWidth(font, ord(ch)) for ch in label)
+    start_x = - (total_width / WINDOW_W)
+    glRasterPos2f(start_x, -0.01)
+    for ch in label: glutBitmapCharacter(font, ord(ch))
 
     # Cleanup matrices/state
     glPopMatrix()
