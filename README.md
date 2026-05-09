@@ -39,7 +39,7 @@ git clone https://github.com/Sakif16/is-real-arcade-bomber.git
 cd is-real-arcade-bomber
 ```
 
-### 🔹 Step 3: Install system-level OpenGL/GLUT (Linux only)
+### 🔹 Step 3 (FOR LINUX USERS ONLY⚠️): Install system-level OpenGL/GLUT
 - **Windows**: Nothing extra needed — PyOpenGL bundles freeglut.
 - **macOS**: Nothing extra needed — GLUT is built in.
 - **Linux**:
