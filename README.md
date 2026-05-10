@@ -1,12 +1,12 @@
 # is-real-arcade-bomber
 
 ## 🧩 Intro
-A 3D arcade bomber game where you pilot a B-2 Spirit stealth bomber over a Tel-Aviv, Israel. Drop bombs on targets, collect power-ups, and survive enemy air defences.
+A 3D arcade bomber game where you pilot a B-2 Spirit stealth bomber over Tel-Aviv, Israel. Drop bombs on targets, collect power-ups, and survive enemy air defences.
 
 ---
 
 ## 📖 Description
-is-real-arcade-bomber is a Python-based 3D game built with OpenGL, inspired by War Thunder for academic purposes. You fly a stealth bomber over a city rendered in real-time, choosing your targets carefully — destroy buildings for points, but avoid hospitals or face a score penalty. As your score climbs, enemy air defences spawn and shoot back. Collect repair and upgrade tokens to stay alive and extend your bomb loadout.
+is-real-arcade-bomber is a Python-based 3D game built with OpenGL, inspired by War Thunder for academic purposes. You fly a stealth bomber over Israel rendered in real-time, choosing your targets carefully — destroy buildings for points, but avoid hospitals or face a score penalty. As your score climbs, enemy air defences spawn and shoot back. Collect repair and upgrade tokens to stay alive and extend your bomb loadout.
 
 ### 🔹 What you can do:
 - Pilot a B-2 Spirit bomber in full 3D flight
