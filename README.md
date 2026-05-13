@@ -20,6 +20,13 @@ is-real-arcade-bomber is a Python-based 3D game built with OpenGL, inspired by W
 
 ---
 
+## 🎥 Demo
+<p align="center">
+  <img src="demo.gif" alt="Bomber Demo" width="700"/>
+</p>
+
+---
+
 ## 🛠️ Tech Stack
 - Python
 - PyOpenGL (OpenGL, GLU, GLUT)
