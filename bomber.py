@@ -1731,7 +1731,7 @@ def main():
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
     glutInitWindowSize(WINDOW_W, WINDOW_H)
     glutInitWindowPosition(100, 100)
-    glutCreateWindow(b"Israel Bombing Simulator")
+    glutCreateWindow(b"Israel Arcade Bomber")
 
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_BLEND)
